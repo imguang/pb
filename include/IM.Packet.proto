@@ -1,0 +1,41 @@
+﻿syntax = "proto2";
+
+import "google/protobuf/any.proto";
+
+package com.yealink.im.protocol;
+
+option java_outer_classname = "Packet";
+
+enum PacketType{
+    REQ = 0;
+    RESP = 1;
+    NOTIFY = 2;	     
+}
+
+enum CmdID{
+	
+    GROUP_CREATE = 0x3001;//群组创建
+
+    SINGLE_CHAT = 0x2001;//单对单聊天
+}
+
+message Packets{
+	
+	//ID
+	required string id = 1;
+
+	//发送者jid
+	required string from = 2;
+
+	//接收者jid
+	optional string to = 3;
+
+	//类型
+	required PacketType type = 4;
+
+	//command id
+	required CmdID cmd = 5;
+
+	required google.protobuf.Any body = 6;
+
+}
