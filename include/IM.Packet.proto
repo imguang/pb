@@ -1,41 +1,103 @@
-﻿syntax = "proto2";
+﻿syntax = "proto3";
 
 import "google/protobuf/any.proto";
 
-package com.yealink.im.protocol;
+package com.example.demo;
 
-option java_outer_classname = "Packet";
 
-enum PacketType{
-    REQ = 0;
-    RESP = 1;
-    NOTIFY = 2;	     
-}
+
 
 enum CmdID{
+
+    DEFAULT = 0;
 	
     GROUP_CREATE = 0x3001;//群组创建
 
     SINGLE_CHAT = 0x2001;//单对单聊天
 }
 
-message Packets{
+message Packet{
 	
 	//ID
-	required string id = 1;
+	string id = 1;
 
 	//发送者jid
-	required string from = 2;
+	string from = 2;
 
 	//接收者jid
-	optional string to = 3;
+	string to = 3;
 
 	//类型
-	required PacketType type = 4;
+	PacketType type = 4;
+	
+	enum PacketType{
+	
+		//请求
+		REQ = 0;
+		
+		//响应
+		RESP = 1;
+		
+		//通知
+		NOTIFY = 2;	     
+	}
+	
 
 	//command id
-	required CmdID cmd = 5;
+	CmdID cmd = 5;
 
-	required google.protobuf.Any body = 6;
+	//泛型支持
+	google.protobuf.Any body = 6;
+
+}
+
+//群组创建
+message GroupCreate{
+	
+	//群名称
+	string name = 1;
+	
+	//公告
+	string desc = 2;
+	
+	//是否公开
+	bool isPublic = 3;
+	
+	//能否读历史消息
+	bool canReadHistory = 4;
+
+	//群图标
+	string icon = 5;
+	
+	GroupType persistent = 6;
+	
+	enum GroupType{
+	
+		DISCUSSION = 0;
+	
+		GROUP = 1;
+	
+	}
+
+}
+
+//点对点聊天
+message SingleChat{
+
+	//消息体
+	string message = 1;
+
+	//消息类型
+	ChatType type = 2;
+
+	enum ChatType{
+		
+		//正常
+		NORMAL = 0;
+		
+		//加密
+		encrypt = 1;
+		
+	}
 
 }
